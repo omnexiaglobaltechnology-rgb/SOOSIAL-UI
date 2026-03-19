@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  Home, Search, Play, MessageSquare, User, 
-  Heart, MessageCircle, Send, Bookmark, MoreVertical, 
-  Plus, Bell, Settings, Phone, Video, Edit3, Grid, 
-  Tag, ChevronLeft, Moon, LogOut, Compass
+import {
+  Home, Search, Play, MessageSquare, User,
+  Heart, MessageCircle, Send, Bookmark, MoreVertical,
+  Plus, Bell, Settings, Phone, Video, Edit3, Grid,
+  Tag, ChevronLeft, Moon, LogOut, Compass, Mic,
+  Repeat, Share
 } from 'lucide-react';
 
 // --- Production UI Components ---
@@ -61,6 +62,32 @@ const MOCK_POSTS = [
   }
 ];
 
+const MOCK_TWEETS = [
+  {
+    id: 1,
+    name: 'Alex Developer',
+    username: '@alex_dev',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
+    content: 'Just deployed the new UI. Glassmorphism is out, solid minimal design is back in. What do you guys think? 🚀',
+    time: '2h',
+    replies: 45,
+    reposts: 12,
+    likes: 342,
+  },
+  {
+    id: 2,
+    name: 'Tech Insider',
+    username: '@tech_insider',
+    avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=150&h=150&fit=crop',
+    content: 'Breaking: New design systems are prioritizing speed and usability over heavy visual effects. The landscape is shifting rapidly toward clean, native-feeling apps. #TechNews #Design',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&h=400&fit=crop',
+    time: '4h',
+    replies: 128,
+    reposts: 450,
+    likes: 1205,
+  }
+];
+
 const MOCK_CHATS = [
   { id: 1, name: 'omnexia technology', msg: 'Hey, when are we meeting?', time: 'Wed', unread: 1, avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=150&h=150&fit=crop', hasStory: true },
   { id: 2, name: 'daphnelahi7757', msg: 'Call me when you are free', time: 'Mar 09', unread: 0, avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop', hasStory: false },
@@ -83,92 +110,159 @@ const MOCK_NOTIFICATIONS = {
 
 // --- Main Views ---
 
-const HomeView = ({ onNotificationClick }) => (
-  <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    {/* Sticky Container for BOTH Header and Stories */}
-    <div className="flex-none sticky top-0 z-20 bg-[#0B0F14] flex flex-col border-b border-white/[0.06]">
+const HomeView = ({ onNotificationClick }) => {
+  const [feedTab, setFeedTab] = useState('forYou'); // 'forYou' | 'democracy'
 
-      {/* Header with Custom Search Bar */}
-      <div className="flex justify-between items-center px-4 pt-3 pb-2">
-        <h1 className="text-xl font-bold text-white tracking-tight">Soosial</h1>
-        
-        {/* Central Pill Search Bar */}
-        <div className="flex-1 mx-3 flex items-center h-8 rounded-full border border-white/[0.15] pl-3 pr-0.5 bg-transparent">
-          <input 
-            type="text" 
-            placeholder="Search..."
-            className="w-full bg-transparent text-[13px] text-white outline-none placeholder-gray-500"
-          />
-          <button className="bg-[#111827] h-7 w-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors hover:bg-white/10">
-             <Search size={14} className="text-gray-300" />
+  return (
+    <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+
+      {/* Sticky Top Block: Header + Vertical Stories + X-Tabs */}
+      <div className="flex-none sticky top-0 z-20 bg-[#0B0F14]/95 backdrop-blur-xl flex flex-col pt-1 border-b border-white/[0.06]">
+
+        {/* Unique Header with Specific Custom Search Bar */}
+        <div className="flex justify-between items-center px-4 pt-2 pb-4">
+          <h1 className="text-[22px] font-extrabold text-white tracking-tight">Soosial<span className="text-[#6C5CE7]">.</span></h1>
+
+          {/* Custom Search Pill matching exact request */}
+          <div className="flex-1 mx-4 flex items-center h-[38px] rounded-full border-[1.5px] border-white/[0.12] pl-4 pr-1 bg-[#0B0F14] focus-within:border-white/[0.25] transition-colors">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full bg-transparent text-[13px] text-white outline-none placeholder-gray-500 font-medium"
+            />
+            <button className="bg-white h-[30px] w-[42px] rounded-full flex items-center justify-center flex-shrink-0 transition-transform active:scale-95">
+              <Search size={16} className="text-[#0B0F14]" strokeWidth={2.5} />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <IconButton icon={Plus} className="!p-2 bg-[#111827] rounded-full border border-white/[0.06]" />
+            <IconButton icon={Bell} notification={true} className="!p-2 bg-[#111827] rounded-full border border-white/[0.06]" onClick={onNotificationClick} />
+          </div>
+        </div>
+
+        {/* Clean, Minimal Circular Stories */}
+        <div className="flex gap-4 overflow-x-auto px-4 pt-2 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {MOCK_USERS.map(story => (
+            <div key={story.id} className="flex flex-col items-center gap-2 min-w-[72px] cursor-pointer group">
+              <div className="relative">
+                <StoryRing hasStory={story.hasStory || story.isMe} className="group-hover:scale-95 transition-transform duration-200">
+                  <img src={story.avatar} alt={story.user} className="w-16 h-16 rounded-full object-cover" />
+                </StoryRing>
+                {story.isMe && (
+                  <div className="absolute bottom-0 right-0 bg-[#6C5CE7] rounded-full p-1 border-2 border-[#0B0F14]">
+                    <Plus size={12} className="text-white font-bold" />
+                  </div>
+                )}
+              </div>
+              <span className="text-[12px] text-gray-400 font-medium truncate w-[72px] text-center">{story.user}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* X-Style Feed Select Tabs */}
+        <div className="flex px-4 gap-6">
+          <button
+            onClick={() => setFeedTab('forYou')}
+            className={`py-3 text-[15px] font-bold transition-all relative ${feedTab === 'forYou' ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
+          >
+            For you
+            {feedTab === 'forYou' && <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#6C5CE7] rounded-t-full"></div>}
+          </button>
+          <button
+            onClick={() => setFeedTab('democracy')}
+            className={`py-3 text-[15px] font-bold transition-all relative ${feedTab === 'democracy' ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
+          >
+            Democracy
+            {feedTab === 'democracy' && <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#6C5CE7] rounded-t-full"></div>}
           </button>
         </div>
-
-        <div className="flex items-center gap-1">
-          <IconButton icon={Plus} className="!p-1" />
-          <IconButton icon={Bell} notification={true} className="!p-1" onClick={onNotificationClick} />
-        </div>
       </div>
 
-      {/* Stories - Now sticky with the header and no bounding box */}
-      <div className="flex gap-4 overflow-x-auto px-4 pt-2 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {MOCK_USERS.map(story => (
-          <div key={story.id} className="flex flex-col items-center gap-2 min-w-[72px] cursor-pointer">
-            <div className="relative">
-              <StoryRing hasStory={story.hasStory || story.isMe}>
-                <img src={story.avatar} alt={story.user} className="w-16 h-16 rounded-full object-cover" />
-              </StoryRing>
-              {story.isMe && (
-                <div className="absolute bottom-0 right-0 bg-[#6C5CE7] rounded-full p-1 border-2 border-[#0B0F14]">
-                  <Plus size={12} className="text-white font-bold" />
+      {/* Dynamic Feed Content */}
+      <div className="flex-none flex flex-col">
+        {feedTab === 'forYou' ? (
+          // --- Instagram Style Feed ---
+          MOCK_POSTS.map(post => (
+            <div key={post.id} className="flex flex-col pb-4 pt-2 border-b border-white/[0.06]">
+              <div className="flex justify-between items-center px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <StoryRing hasStory={true}>
+                    <img src={post.avatar} alt={post.user} className="w-8 h-8 rounded-full object-cover" />
+                  </StoryRing>
+                  <p className="text-[14px] font-semibold text-white">{post.user}</p>
                 </div>
-              )}
+                <button className="text-gray-400"><MoreVertical size={20} /></button>
+              </div>
+
+              <img src={post.image} alt="Post" className="w-full aspect-square object-cover bg-[#111827]" />
+
+              <div className="flex flex-col px-4 pt-4">
+                <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center gap-4">
+                    <IconButton icon={Heart} />
+                    <IconButton icon={MessageCircle} />
+                    <IconButton icon={Send} />
+                  </div>
+                  <IconButton icon={Bookmark} />
+                </div>
+
+                <p className="text-[14px] font-semibold text-white mb-2">{post.likes} likes</p>
+                <p className="text-[14px] text-gray-200 leading-relaxed mb-2">
+                  <span className="font-semibold text-white mr-2">{post.user}</span>
+                  {post.caption}
+                </p>
+                <p className="text-[14px] text-[#6C5CE7] font-medium mb-2">{post.tags.join(' ')}</p>
+                <p className="text-[12px] text-gray-500 font-medium">{post.time}</p>
+              </div>
             </div>
-            <span className="text-[12px] text-gray-400 font-medium truncate w-[72px] text-center">{story.user}</span>
-          </div>
-        ))}
+          ))
+        ) : (
+          // --- Twitter/X Style Democracy Feed ---
+          MOCK_TWEETS.map(tweet => (
+            <div key={tweet.id} className="flex gap-3 px-4 py-4 border-b border-white/[0.06] hover:bg-[#111827]/50 transition-colors cursor-pointer">
+              <img src={tweet.avatar} alt={tweet.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+              <div className="flex flex-col flex-1 min-w-0">
+
+                <div className="flex items-center gap-1.5 text-[14px]">
+                  <span className="font-bold text-white truncate">{tweet.name}</span>
+                  <span className="text-gray-500 truncate">{tweet.username}</span>
+                  <span className="text-gray-500">·</span>
+                  <span className="text-gray-500 flex-shrink-0">{tweet.time}</span>
+                </div>
+
+                <p className="text-[15px] text-gray-200 mt-1 leading-relaxed">{tweet.content}</p>
+
+                {tweet.image && (
+                  <img src={tweet.image} alt="Tweet media" className="mt-3 w-full rounded-2xl border border-white/[0.06] object-cover max-h-[300px]" />
+                )}
+
+                <div className="flex justify-between items-center mt-3 pr-6 text-gray-500">
+                  <button className="flex items-center gap-1.5 hover:text-[#00D1FF] transition-colors group">
+                    <div className="p-1.5 -ml-1.5 rounded-full group-hover:bg-[#00D1FF]/10"><MessageCircle size={16} /></div>
+                    <span className="text-[13px]">{tweet.replies}</span>
+                  </button>
+                  <button className="flex items-center gap-1.5 hover:text-green-500 transition-colors group">
+                    <div className="p-1.5 rounded-full group-hover:bg-green-500/10"><Repeat size={16} /></div>
+                    <span className="text-[13px]">{tweet.reposts}</span>
+                  </button>
+                  <button className="flex items-center gap-1.5 hover:text-rose-500 transition-colors group">
+                    <div className="p-1.5 rounded-full group-hover:bg-rose-500/10"><Heart size={16} /></div>
+                    <span className="text-[13px]">{tweet.likes}</span>
+                  </button>
+                  <button className="flex items-center gap-1.5 hover:text-[#6C5CE7] transition-colors group">
+                    <div className="p-1.5 rounded-full group-hover:bg-[#6C5CE7]/10"><Share size={16} /></div>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
-
-    {/* Feed */}
-    <div className="flex-none flex flex-col">
-      {MOCK_POSTS.map(post => (
-        <div key={post.id} className="flex flex-col pb-4 border-b border-white/[0.06]">
-          <div className="flex justify-between items-center px-4 py-4">
-            <div className="flex items-center gap-3">
-              <StoryRing hasStory={true}>
-                <img src={post.avatar} alt={post.user} className="w-8 h-8 rounded-full object-cover" />
-              </StoryRing>
-              <p className="text-[14px] font-semibold text-white">{post.user}</p>
-            </div>
-            <button className="text-gray-400"><MoreVertical size={20} /></button>
-          </div>
-
-          <img src={post.image} alt="Post" className="w-full aspect-square object-cover bg-[#111827]" />
-          
-          <div className="flex flex-col px-4 pt-4">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center gap-4">
-                <IconButton icon={Heart} />
-                <IconButton icon={MessageCircle} />
-                <IconButton icon={Send} />
-              </div>
-              <IconButton icon={Bookmark} />
-            </div>
-            
-            <p className="text-[14px] font-semibold text-white mb-2">{post.likes} likes</p>
-            <p className="text-[14px] text-gray-200 leading-relaxed mb-2">
-              <span className="font-semibold text-white mr-2">{post.user}</span>
-              {post.caption}
-            </p>
-            <p className="text-[14px] text-[#6C5CE7] font-medium mb-2">{post.tags.join(' ')}</p>
-            <p className="text-[12px] text-gray-500 font-medium">{post.time}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
+  );
+};
 
 const NotificationsView = ({ onBack }) => (
   <div className="flex flex-col h-full bg-[#0B0F14] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -220,12 +314,8 @@ const NotificationsView = ({ onBack }) => (
   </div>
 );
 
-{/* MAJOR CHANGE: Video Section
-  The video is now an elevated card that stops before the navbar, ensuring it doesn't overlap.
-*/}
 const SoosView = () => (
   <div className="h-full bg-[#0B0F14] flex flex-col">
-    {/* Video Card - Stops cleanly above navbar spacer */}
     <div className="flex-1 relative overflow-hidden rounded-b-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.6)] z-10 border-b border-white/[0.06]">
       <img
         src="https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?w=800&h=1600&fit=crop"
@@ -235,7 +325,6 @@ const SoosView = () => (
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
 
-      {/* Floating Actions inside the card */}
       <div className="absolute right-4 bottom-6 flex flex-col items-center gap-6 z-10">
         <button className="flex flex-col items-center gap-2 text-white hover:scale-110 transition-transform">
           <Heart size={28} fill="white" className="drop-shadow-lg" />
@@ -269,7 +358,6 @@ const SoosView = () => (
       </div>
     </div>
 
-    {/* Exact spacer for navbar to sit inside without overlapping video */}
     <div className="h-[96px] w-full flex-none bg-[#0B0F14]"></div>
   </div>
 );
@@ -331,8 +419,8 @@ const ChatsListView = ({ onChatSelect }) => (
           key={chat.id}
           onClick={() => onChatSelect(chat)}
           className={`flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer transition-colors ${chat.unread > 0
-              ? 'bg-[#111827] border border-white/[0.06]'
-              : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
+            ? 'bg-[#111827] border border-white/[0.06]'
+            : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
             }`}
         >
           <div className="relative flex-shrink-0">
@@ -434,7 +522,7 @@ const ProfileView = ({ onSettingsClick }) => (
         </div>
 
         <StoryRing hasStory={true} className="p-[2px] flex-shrink-0">
-           <img src={MOCK_USER.avatar} alt="Profile" className="w-[84px] h-[84px] rounded-full object-cover border-4 border-[#0B0F14]" />
+          <img src={MOCK_USER.avatar} alt="Profile" className="w-[84px] h-[84px] rounded-full object-cover border-4 border-[#0B0F14]" />
         </StoryRing>
       </div>
 
@@ -534,7 +622,7 @@ const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
       <div className="flex flex-col gap-3">
         <div className="bg-[#111827] rounded-xl border border-white/[0.06] overflow-hidden">
           <button className="w-full flex items-center justify-between p-4 active:bg-[#1A2235] transition-colors">
-             <div className="flex items-center gap-3 text-red-500"><LogOut size={20} /><span className="text-[14px] font-semibold">Log out</span></div>
+            <div className="flex items-center gap-3 text-red-500"><LogOut size={20} /><span className="text-[14px] font-semibold">Log out</span></div>
           </button>
         </div>
       </div>
@@ -556,7 +644,7 @@ export default function App() {
     if (showSettings) return <SettingsView onBack={() => setShowSettings(false)} isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} />;
     if (activeChat) return <ChatDetailView chat={activeChat} onBack={() => setActiveChat(null)} />;
 
-    switch(activeTab) {
+    switch (activeTab) {
       case 'home': return <HomeView onNotificationClick={() => setShowNotifications(true)} />;
       case 'soos': return <SoosView />;
       case 'chats': return <ChatsListView onChatSelect={setActiveChat} />;
