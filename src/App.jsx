@@ -85,48 +85,50 @@ const MOCK_NOTIFICATIONS = {
 
 const HomeView = ({ onNotificationClick }) => (
   <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    {/* Header with Custom Search Bar */}
-    <div className="flex-none flex justify-between items-center px-4 py-3 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
-      <h1 className="text-xl font-bold text-white tracking-tight">Soosial</h1>
+    {/* Sticky Container for BOTH Header and Stories */}
+    <div className="flex-none sticky top-0 z-20 bg-[#0B0F14] flex flex-col border-b border-white/[0.06]">
 
-      {/* Central Pill Search Bar */}
-      <div className="flex-1 mx-3 flex items-center h-8 rounded-full border border-white/[0.15] pl-3 pr-0.5 bg-transparent">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-full bg-transparent text-[13px] text-white outline-none placeholder-gray-500"
-        />
-        <button className="bg-[#111827] h-7 w-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors hover:bg-white/10">
-          <Search size={14} className="text-gray-300" />
-        </button>
-      </div>
+      {/* Header with Custom Search Bar */}
+      <div className="flex justify-between items-center px-4 pt-3 pb-2">
+        <h1 className="text-xl font-bold text-white tracking-tight">Soosial</h1>
 
-      <div className="flex items-center gap-1">
-        <IconButton icon={Plus} className="!p-1" />
-        <IconButton icon={Bell} notification={true} className="!p-1" onClick={onNotificationClick} />
-      </div>
-    </div>
-
-    {/* Stories */}
-    <div className="flex-none flex gap-4 overflow-x-auto px-4 py-4 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-      {MOCK_USERS.map(story => (
-        <div key={story.id} className="flex flex-col items-center gap-2 min-w-[72px] cursor-pointer">
-          <div className="relative">
-            <StoryRing hasStory={story.hasStory || story.isMe}>
-              <img src={story.avatar} alt={story.user} className="w-16 h-16 rounded-full object-cover" />
-            </StoryRing>
-            {story.isMe && (
-              <div className="absolute bottom-0 right-0 bg-[#6C5CE7] rounded-full p-1 border-2 border-[#0B0F14]">
-                <Plus size={12} className="text-white font-bold" />
-              </div>
-            )}
-          </div>
-          <span className="text-[12px] text-gray-400 font-medium truncate w-[72px] text-center">{story.user}</span>
+        {/* Central Pill Search Bar */}
+        <div className="flex-1 mx-3 flex items-center h-8 rounded-full border border-white/[0.15] pl-3 pr-0.5 bg-transparent">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="w-full bg-transparent text-[13px] text-white outline-none placeholder-gray-500"
+          />
+          <button className="bg-[#111827] h-7 w-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors hover:bg-white/10">
+            <Search size={14} className="text-gray-300" />
+          </button>
         </div>
-      ))}
-    </div>
 
-    <div className="flex-none w-full h-1.5 bg-[#111827] border-y border-white/[0.04]"></div>
+        <div className="flex items-center gap-1">
+          <IconButton icon={Plus} className="!p-1" />
+          <IconButton icon={Bell} notification={true} className="!p-1" onClick={onNotificationClick} />
+        </div>
+      </div>
+
+      {/* Stories - Now sticky with the header and no bounding box */}
+      <div className="flex gap-4 overflow-x-auto px-4 pt-2 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {MOCK_USERS.map(story => (
+          <div key={story.id} className="flex flex-col items-center gap-2 min-w-[72px] cursor-pointer">
+            <div className="relative">
+              <StoryRing hasStory={story.hasStory || story.isMe}>
+                <img src={story.avatar} alt={story.user} className="w-16 h-16 rounded-full object-cover" />
+              </StoryRing>
+              {story.isMe && (
+                <div className="absolute bottom-0 right-0 bg-[#6C5CE7] rounded-full p-1 border-2 border-[#0B0F14]">
+                  <Plus size={12} className="text-white font-bold" />
+                </div>
+              )}
+            </div>
+            <span className="text-[12px] text-gray-400 font-medium truncate w-[72px] text-center">{story.user}</span>
+          </div>
+        ))}
+      </div>
+    </div>
 
     {/* Feed */}
     <div className="flex-none flex flex-col">
@@ -331,8 +333,8 @@ const ChatsListView = ({ onChatSelect }) => (
           key={chat.id}
           onClick={() => onChatSelect(chat)}
           className={`flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer transition-colors ${chat.unread > 0
-              ? 'bg-[#111827] border border-white/[0.06]'
-              : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
+            ? 'bg-[#111827] border border-white/[0.06]'
+            : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
             }`}
         >
           {/* Squircle Avatars */}
@@ -490,7 +492,7 @@ const ProfileView = ({ onSettingsClick }) => (
   </div>
 );
 
-const SettingsView = ({ onBack }) => (
+const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
   <div className="flex flex-col h-full bg-[#0B0F14] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
     <div className="flex items-center px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <IconButton icon={ChevronLeft} onClick={onBack} className="-ml-2" />
@@ -520,10 +522,15 @@ const SettingsView = ({ onBack }) => (
             <div className="flex items-center gap-3"><Bell size={20} className="text-white" /><span className="text-white text-[14px] font-medium">Notifications</span></div>
             <ChevronLeft size={20} className="text-gray-500 rotate-180" />
           </button>
-          <div className="w-full flex items-center justify-between p-4 active:bg-[#1A2235] transition-colors">
+
+          {/* Interactive Dark Mode Toggle */}
+          <div
+            className="w-full flex items-center justify-between p-4 cursor-pointer active:bg-[#1A2235] transition-colors"
+            onClick={toggleDarkMode}
+          >
             <div className="flex items-center gap-3"><Moon size={20} className="text-white" /><span className="text-white text-[14px] font-medium">Dark mode</span></div>
-            <div className="w-11 h-6 bg-[#6C5CE7] rounded-full p-0.5 flex justify-end">
-              <div className="w-5 h-5 bg-white rounded-full shadow-sm"></div>
+            <div className={`w-11 h-6 rounded-full p-0.5 flex transition-colors duration-300 ${isDarkMode ? 'bg-[#6C5CE7]' : 'bg-gray-600'}`}>
+              <div className={`w-5 h-5 bg-white rounded-full shadow-sm transform transition-transform duration-300 ${isDarkMode ? 'translate-x-5' : 'translate-x-0'}`}></div>
             </div>
           </div>
         </div>
@@ -547,10 +554,11 @@ export default function App() {
   const [activeChat, setActiveChat] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const renderContent = () => {
     if (showNotifications) return <NotificationsView onBack={() => setShowNotifications(false)} />;
-    if (showSettings) return <SettingsView onBack={() => setShowSettings(false)} />;
+    if (showSettings) return <SettingsView onBack={() => setShowSettings(false)} isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} />;
     if (activeChat) return <ChatDetailView chat={activeChat} onBack={() => setActiveChat(null)} />;
 
     switch (activeTab) {
@@ -579,7 +587,7 @@ export default function App() {
 
         {!activeChat && !showSettings && !showNotifications && (
           <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none px-6">
-            <nav className="pointer-events-auto bg-[#111827]/80 backdrop-blur-xl border border-white/[0.12] rounded-full flex justify-between items-center px-6 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full max-w-[340px] gap-4">
+            <nav className="pointer-events-auto bg-black/30 backdrop-blur-2xl border border-white/[0.15] rounded-full flex justify-between items-center px-6 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full max-w-[340px] gap-4">
               {navItems.map((item) => {
                 const isActive = activeTab === item.id;
                 const Icon = item.icon;
@@ -591,7 +599,7 @@ export default function App() {
                   >
                     <Icon
                       size={26}
-                      className={isActive ? 'text-white fill-white' : 'text-gray-400 hover:text-white transition-colors'}
+                      className={isActive ? 'text-white fill-white drop-shadow-md' : 'text-gray-400 hover:text-white transition-colors'}
                       strokeWidth={isActive ? 2 : 2}
                     />
                   </button>
