@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Home, Search, Play, MessageSquare, User,
-  Heart, MessageCircle, Send, Bookmark, MoreVertical,
-  Plus, Bell, Settings, Phone, Video, Edit3, Grid,
+import { 
+  Home, Search, Play, MessageSquare, User, 
+  Heart, MessageCircle, Send, Bookmark, MoreVertical, 
+  Plus, Bell, Settings, Phone, Video, Edit3, Grid, 
   Tag, ChevronLeft, Moon, LogOut, Compass
 } from 'lucide-react';
 
@@ -91,16 +91,16 @@ const HomeView = ({ onNotificationClick }) => (
       {/* Header with Custom Search Bar */}
       <div className="flex justify-between items-center px-4 pt-3 pb-2">
         <h1 className="text-xl font-bold text-white tracking-tight">Soosial</h1>
-
+        
         {/* Central Pill Search Bar */}
         <div className="flex-1 mx-3 flex items-center h-8 rounded-full border border-white/[0.15] pl-3 pr-0.5 bg-transparent">
-          <input
-            type="text"
+          <input 
+            type="text" 
             placeholder="Search..."
             className="w-full bg-transparent text-[13px] text-white outline-none placeholder-gray-500"
           />
           <button className="bg-[#111827] h-7 w-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors hover:bg-white/10">
-            <Search size={14} className="text-gray-300" />
+             <Search size={14} className="text-gray-300" />
           </button>
         </div>
 
@@ -145,7 +145,7 @@ const HomeView = ({ onNotificationClick }) => (
           </div>
 
           <img src={post.image} alt="Post" className="w-full aspect-square object-cover bg-[#111827]" />
-
+          
           <div className="flex flex-col px-4 pt-4">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-4">
@@ -155,7 +155,7 @@ const HomeView = ({ onNotificationClick }) => (
               </div>
               <IconButton icon={Bookmark} />
             </div>
-
+            
             <p className="text-[14px] font-semibold text-white mb-2">{post.likes} likes</p>
             <p className="text-[14px] text-gray-200 leading-relaxed mb-2">
               <span className="font-semibold text-white mr-2">{post.user}</span>
@@ -172,17 +172,14 @@ const HomeView = ({ onNotificationClick }) => (
 
 const NotificationsView = ({ onBack }) => (
   <div className="flex flex-col h-full bg-[#0B0F14] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    {/* Header */}
     <div className="flex items-center px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <IconButton icon={ChevronLeft} onClick={onBack} className="-ml-2" />
       <h1 className="text-xl font-bold text-white tracking-tight ml-2">Notifications</h1>
     </div>
 
-    {/* Content */}
     <div className="flex flex-col px-4 py-5">
-      {/* This Week Section */}
       <h2 className="text-[15px] font-semibold text-white mb-5 flex items-center gap-2">
-        <div className="w-0.5 h-4 bg-[#white] rounded-full opacity-60"></div>
+        <div className="w-0.5 h-4 bg-white rounded-full opacity-60"></div>
         This week
       </h2>
       <div className="flex flex-col gap-5 mb-8">
@@ -202,7 +199,6 @@ const NotificationsView = ({ onBack }) => (
         ))}
       </div>
 
-      {/* This Month Section */}
       <h2 className="text-[15px] font-semibold text-white mb-5">This month</h2>
       <div className="flex flex-col gap-5">
         {MOCK_NOTIFICATIONS.thisMonth.map(notif => (
@@ -224,53 +220,62 @@ const NotificationsView = ({ onBack }) => (
   </div>
 );
 
+{/* MAJOR CHANGE: Video Section
+  The video is now an elevated card that stops before the navbar, ensuring it doesn't overlap.
+*/}
 const SoosView = () => (
-  <div className="h-full bg-[#0B0F14] relative flex justify-center items-center">
-    <img
-      src="https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?w=800&h=1600&fit=crop"
-      className="absolute inset-0 w-full h-full object-cover"
-      alt="Video"
-    />
-    <div className="absolute inset-0 bg-black/20"></div>
-    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0B0F14] to-transparent"></div>
+  <div className="h-full bg-[#0B0F14] flex flex-col">
+    {/* Video Card - Stops cleanly above navbar spacer */}
+    <div className="flex-1 relative overflow-hidden rounded-b-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.6)] z-10 border-b border-white/[0.06]">
+      <img
+        src="https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?w=800&h=1600&fit=crop"
+        className="absolute inset-0 w-full h-full object-cover"
+        alt="Video"
+      />
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
 
-    <div className="absolute right-4 bottom-6 flex flex-col items-center gap-6 z-10">
-      <button className="flex flex-col items-center gap-2 text-white">
-        <Heart size={28} fill="white" />
-        <span className="text-[12px] font-semibold">45k</span>
-      </button>
-      <button className="flex flex-col items-center gap-2 text-white">
-        <MessageCircle size={28} />
-        <span className="text-[12px] font-semibold">1k</span>
-      </button>
-      <button className="flex flex-col items-center gap-2 text-white">
-        <Send size={28} />
-      </button>
-      <button className="flex flex-col items-center gap-2 text-white">
-        <MoreVertical size={28} />
-      </button>
+      {/* Floating Actions inside the card */}
+      <div className="absolute right-4 bottom-6 flex flex-col items-center gap-6 z-10">
+        <button className="flex flex-col items-center gap-2 text-white hover:scale-110 transition-transform">
+          <Heart size={28} fill="white" className="drop-shadow-lg" />
+          <span className="text-[13px] font-bold drop-shadow-md">45k</span>
+        </button>
+        <button className="flex flex-col items-center gap-2 text-white hover:scale-110 transition-transform">
+          <MessageCircle size={28} className="drop-shadow-lg" />
+          <span className="text-[13px] font-bold drop-shadow-md">1k</span>
+        </button>
+        <button className="flex flex-col items-center gap-2 text-white hover:scale-110 transition-transform">
+          <Send size={28} className="drop-shadow-lg" />
+        </button>
+        <button className="flex flex-col items-center gap-2 text-white hover:scale-110 transition-transform">
+          <MoreVertical size={28} className="drop-shadow-lg" />
+        </button>
+      </div>
+
+      <div className="absolute left-4 bottom-6 right-20 z-10 text-white flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <StoryRing hasStory={true} className="w-11 h-11">
+            <img src={MOCK_USER.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+          </StoryRing>
+          <span className="font-bold text-[15px] drop-shadow-md">ganeshkgp</span>
+          <button className="bg-white/20 backdrop-blur-md border border-white/30 px-3.5 py-1.5 rounded-lg text-[12px] font-bold hover:bg-white/30 transition-colors shadow-sm">Follow</button>
+        </div>
+        <p className="text-[14px] leading-relaxed drop-shadow-md font-medium">Neon aesthetics checking in 🎨✨</p>
+        <div className="flex items-center gap-2 text-[12px] font-semibold text-white/90 drop-shadow-md">
+          <Compass size={14} />
+          <span>Original Audio - ganeshkgp</span>
+        </div>
+      </div>
     </div>
 
-    <div className="absolute left-4 bottom-6 right-20 z-10 text-white flex flex-col gap-3">
-      <div className="flex items-center gap-3">
-        <StoryRing hasStory={true} className="w-10 h-10">
-          <img src={MOCK_USER.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
-        </StoryRing>
-        <span className="font-semibold text-[14px]">ganeshkgp</span>
-        <button className="border border-white/40 px-3 py-1.5 rounded-md text-[12px] font-semibold">Follow</button>
-      </div>
-      <p className="text-[14px] leading-relaxed">Neon aesthetics checking in 🎨</p>
-      <div className="flex items-center gap-2 text-[12px] font-medium text-gray-300">
-        <Compass size={14} />
-        <span>Original Audio - ganeshkgp</span>
-      </div>
-    </div>
+    {/* Exact spacer for navbar to sit inside without overlapping video */}
+    <div className="h-[96px] w-full flex-none bg-[#0B0F14]"></div>
   </div>
 );
 
 const ChatsListView = ({ onChatSelect }) => (
   <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    {/* Header */}
     <div className="px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold text-white tracking-tight">Chats</h1>
@@ -280,7 +285,6 @@ const ChatsListView = ({ onChatSelect }) => (
         </div>
       </div>
 
-      {/* Search */}
       <div className="flex items-center gap-3 bg-[#111827] px-4 py-2.5 rounded-xl border border-white/[0.06] mb-4">
         <Search className="text-gray-400" size={18} />
         <input
@@ -290,7 +294,6 @@ const ChatsListView = ({ onChatSelect }) => (
         />
       </div>
 
-      {/* Modern Segmented Tabs */}
       <div className="flex bg-[#111827] p-1 rounded-xl border border-white/[0.06]">
         <button className="flex-1 py-1.5 flex justify-center items-center bg-[#1A2235] rounded-lg shadow-sm text-white text-[13px] font-semibold transition-all">
           Private
@@ -301,20 +304,16 @@ const ChatsListView = ({ onChatSelect }) => (
       </div>
     </div>
 
-    {/* Modern Active/Pinned Cards (Replaces IG Story Rings) */}
     <div className="flex flex-col mt-4 mb-2">
       <h2 className="px-4 text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3">Active Now</h2>
       <div className="flex gap-3 overflow-x-auto px-4 pb-4 border-b border-white/[0.06] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {/* Add Note / Pin Action */}
         <div className="flex flex-col items-center justify-center min-w-[68px] h-[86px] rounded-2xl bg-[#111827] border border-white/[0.08] border-dashed cursor-pointer hover:bg-white/5 transition-colors">
           <Plus size={20} className="text-gray-400" />
           <span className="text-[10px] text-gray-400 font-medium mt-2">New</span>
         </div>
 
-        {/* Active Users as Mini-Cards */}
         {MOCK_USERS.filter(u => !u.isMe && u.hasStory).map(user => (
           <div key={user.id} className="relative flex flex-col items-center justify-center min-w-[68px] h-[86px] rounded-2xl bg-[#111827] border border-white/[0.06] overflow-hidden cursor-pointer group hover:border-[#6C5CE7]/50 transition-colors">
-            {/* Blurred background map of user avatar */}
             <img src={user.avatar} className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity blur-[2px]" alt="bg" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F14]/90 via-[#0B0F14]/40 to-transparent"></div>
 
@@ -326,18 +325,16 @@ const ChatsListView = ({ onChatSelect }) => (
       </div>
     </div>
 
-    {/* Card-based Chat List (No edge-to-edge lines) */}
     <div className="flex flex-col gap-1 px-2 pt-2">
       {MOCK_CHATS.map((chat) => (
         <div
           key={chat.id}
           onClick={() => onChatSelect(chat)}
           className={`flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer transition-colors ${chat.unread > 0
-            ? 'bg-[#111827] border border-white/[0.06]'
-            : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
+              ? 'bg-[#111827] border border-white/[0.06]'
+              : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
             }`}
         >
-          {/* Squircle Avatars */}
           <div className="relative flex-shrink-0">
             <img src={chat.avatar} alt={chat.name} className="w-[50px] h-[50px] rounded-[14px] object-cover" />
             {chat.hasStory && (
@@ -398,7 +395,6 @@ const ChatDetailView = ({ chat, onBack }) => (
       </div>
     </div>
 
-    {/* Unified Square Input Area */}
     <div className="px-4 py-4 bg-[#0B0F14] border-t border-white/[0.06] pb-8">
       <div className="flex items-center gap-2 bg-[#111827] rounded-2xl p-1.5 border border-white/[0.06] focus-within:border-white/[0.15] transition-colors">
         <button className="p-2.5 bg-[#1A2235] rounded-xl flex-shrink-0 hover:bg-white/10 transition-colors">
@@ -438,7 +434,7 @@ const ProfileView = ({ onSettingsClick }) => (
         </div>
 
         <StoryRing hasStory={true} className="p-[2px] flex-shrink-0">
-          <img src={MOCK_USER.avatar} alt="Profile" className="w-[84px] h-[84px] rounded-full object-cover border-4 border-[#0B0F14]" />
+           <img src={MOCK_USER.avatar} alt="Profile" className="w-[84px] h-[84px] rounded-full object-cover border-4 border-[#0B0F14]" />
         </StoryRing>
       </div>
 
@@ -523,7 +519,6 @@ const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
             <ChevronLeft size={20} className="text-gray-500 rotate-180" />
           </button>
 
-          {/* Interactive Dark Mode Toggle */}
           <div
             className="w-full flex items-center justify-between p-4 cursor-pointer active:bg-[#1A2235] transition-colors"
             onClick={toggleDarkMode}
@@ -539,7 +534,7 @@ const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
       <div className="flex flex-col gap-3">
         <div className="bg-[#111827] rounded-xl border border-white/[0.06] overflow-hidden">
           <button className="w-full flex items-center justify-between p-4 active:bg-[#1A2235] transition-colors">
-            <div className="flex items-center gap-3 text-red-500"><LogOut size={20} /><span className="text-[14px] font-semibold">Log out</span></div>
+             <div className="flex items-center gap-3 text-red-500"><LogOut size={20} /><span className="text-[14px] font-semibold">Log out</span></div>
           </button>
         </div>
       </div>
@@ -561,7 +556,7 @@ export default function App() {
     if (showSettings) return <SettingsView onBack={() => setShowSettings(false)} isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} />;
     if (activeChat) return <ChatDetailView chat={activeChat} onBack={() => setActiveChat(null)} />;
 
-    switch (activeTab) {
+    switch(activeTab) {
       case 'home': return <HomeView onNotificationClick={() => setShowNotifications(true)} />;
       case 'soos': return <SoosView />;
       case 'chats': return <ChatsListView onChatSelect={setActiveChat} />;
@@ -585,9 +580,10 @@ export default function App() {
           {renderContent()}
         </div>
 
+        {/* Floating Blurred Pill Navbar - 30% Opacity Glassmorphism */}
         {!activeChat && !showSettings && !showNotifications && (
           <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none px-6">
-            <nav className="pointer-events-auto bg-black/30 backdrop-blur-2xl border border-white/[0.15] rounded-full flex justify-between items-center px-6 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full max-w-[340px] gap-4">
+            <nav className="pointer-events-auto bg-[#111827]/30 backdrop-blur-2xl border border-white/[0.15] rounded-full flex justify-between items-center px-6 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full max-w-[340px] gap-4">
               {navItems.map((item) => {
                 const isActive = activeTab === item.id;
                 const Icon = item.icon;
