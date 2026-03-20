@@ -4,10 +4,21 @@
 
 :root {
   color-scheme: dark;
+  --bg-obsidian: #050505;
+  --bg-surface: #0F0F12;
+  --accent-luminous: #A855F7;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-obsidian);
+  color: #FAFAFA;
+}
+
+/* Custom scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 0px;
 }

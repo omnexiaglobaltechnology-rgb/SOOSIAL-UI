@@ -10,8 +10,8 @@ import {
 // --- Production UI Components ---
 
 const StoryRing = ({ children, hasStory, className = '' }) => (
-  <div className={`rounded-full ${hasStory ? 'p-[2px] bg-[#A855F7]' : 'p-[2px] bg-transparent'} ${className}`}>
-    <div className="bg-[#050505] p-[2px] rounded-full h-full w-full flex items-center justify-center">
+  <div className={`rounded-full ${hasStory ? 'p-[2px] bg-[#6C5CE7]' : 'p-[2px] bg-transparent'} ${className}`}>
+    <div className="bg-[#0B0F14] p-[2px] rounded-full h-full w-full flex items-center justify-center">
       {children}
     </div>
   </div>
@@ -24,7 +24,7 @@ const IconButton = ({ icon: Icon, active, onClick, className = '', notification 
   >
     <Icon size={24} strokeWidth={active ? 2.5 : 2} className={active ? 'fill-current' : ''} />
     {notification && (
-      <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#A855F7] border-2 border-[#050505] rounded-full"></span>
+      <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#6C5CE7] border-2 border-[#0B0F14] rounded-full"></span>
     )}
   </button>
 );
@@ -114,30 +114,30 @@ const HomeView = ({ onNotificationClick }) => {
   const [feedTab, setFeedTab] = useState('forYou'); // 'forYou' | 'democracy'
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#050505] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
       {/* Sticky Top Block: Header + Vertical Stories + X-Tabs */}
-      <div className="flex-none sticky top-0 z-20 bg-[#050505]/95 backdrop-blur-xl flex flex-col pt-1 border-b border-white/[0.08]">
+      <div className="flex-none sticky top-0 z-20 bg-[#0B0F14]/95 backdrop-blur-xl flex flex-col pt-1 border-b border-white/[0.06]">
 
         {/* Unique Header with Specific Custom Search Bar */}
         <div className="flex justify-between items-center px-4 pt-2 pb-4">
-          <h1 className="text-[22px] font-extrabold text-white tracking-tight">Soosial<span className="text-[#A855F7]">.</span></h1>
+          <h1 className="text-[22px] font-extrabold text-white tracking-tight">Soosial<span className="text-[#6C5CE7]">.</span></h1>
 
           {/* Custom Search Pill matching exact request */}
-          <div className="flex-1 max-w-[500px] mx-4 flex items-center h-[38px] rounded-full border-[1.5px] border-white/[0.12] pl-4 pr-1 bg-[#050505] focus-within:border-white/[0.25] transition-colors">
+          <div className="flex-1 max-w-[500px] mx-4 flex items-center h-[38px] rounded-full border-[1.5px] border-white/[0.12] pl-4 pr-1 bg-[#0B0F14] focus-within:border-white/[0.25] transition-colors">
             <input
               type="text"
               placeholder="Search..."
               className="w-full bg-transparent text-[13px] text-white outline-none placeholder-gray-500 font-medium"
             />
             <button className="bg-white h-[30px] w-[42px] rounded-full flex items-center justify-center flex-shrink-0 transition-transform active:scale-95">
-              <Search size={16} className="text-[#050505]" strokeWidth={2.5} />
+              <Search size={16} className="text-[#0B0F14]" strokeWidth={2.5} />
             </button>
           </div>
 
           <div className="flex items-center gap-2">
-            <IconButton icon={Plus} className="!p-2 bg-[#0F0F12] rounded-full border border-white/[0.08]" />
-            <IconButton icon={Bell} notification={true} className="!p-2 bg-[#0F0F12] rounded-full border border-white/[0.08]" onClick={onNotificationClick} />
+            <IconButton icon={Plus} className="!p-2 bg-[#111827] rounded-full border border-white/[0.06]" />
+            <IconButton icon={Bell} notification={true} className="!p-2 bg-[#111827] rounded-full border border-white/[0.06]" onClick={onNotificationClick} />
           </div>
         </div>
 
@@ -150,7 +150,7 @@ const HomeView = ({ onNotificationClick }) => {
                   <img src={story.avatar} alt={story.user} className="w-16 h-16 rounded-full object-cover" />
                 </StoryRing>
                 {story.isMe && (
-                  <div className="absolute bottom-0 right-0 bg-[#A855F7] rounded-full p-1 border-2 border-[#050505]">
+                  <div className="absolute bottom-0 right-0 bg-[#6C5CE7] rounded-full p-1 border-2 border-[#0B0F14]">
                     <Plus size={12} className="text-white font-bold" />
                   </div>
                 )}
@@ -167,14 +167,14 @@ const HomeView = ({ onNotificationClick }) => {
             className={`py-3 text-[15px] font-bold transition-all relative ${feedTab === 'forYou' ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
           >
             For you
-            {feedTab === 'forYou' && <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#A855F7] rounded-t-full"></div>}
+            {feedTab === 'forYou' && <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#6C5CE7] rounded-t-full"></div>}
           </button>
           <button
             onClick={() => setFeedTab('democracy')}
             className={`py-3 text-[15px] font-bold transition-all relative ${feedTab === 'democracy' ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
           >
             Democracy
-            {feedTab === 'democracy' && <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#A855F7] rounded-t-full"></div>}
+            {feedTab === 'democracy' && <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#6C5CE7] rounded-t-full"></div>}
           </button>
         </div>
       </div>
@@ -184,7 +184,7 @@ const HomeView = ({ onNotificationClick }) => {
         {feedTab === 'forYou' ? (
           // --- Instagram Style Feed ---
           MOCK_POSTS.map(post => (
-            <div key={post.id} className="flex flex-col pb-4 pt-2 border-b border-white/[0.08]">
+            <div key={post.id} className="flex flex-col pb-4 pt-2 border-b border-white/[0.06]">
               <div className="flex justify-between items-center px-4 py-3">
                 <div className="flex items-center gap-3">
                   <StoryRing hasStory={true}>
@@ -195,7 +195,7 @@ const HomeView = ({ onNotificationClick }) => {
                 <button className="text-gray-400"><MoreVertical size={20} /></button>
               </div>
 
-              <img src={post.image} alt="Post" className="w-full aspect-square object-cover bg-[#0F0F12]" />
+              <img src={post.image} alt="Post" className="w-full aspect-square object-cover bg-[#111827]" />
 
               <div className="flex flex-col px-4 pt-4">
                 <div className="flex justify-between items-center mb-4">
@@ -212,7 +212,7 @@ const HomeView = ({ onNotificationClick }) => {
                   <span className="font-semibold text-white mr-2">{post.user}</span>
                   {post.caption}
                 </p>
-                <p className="text-[14px] text-[#A855F7] font-medium mb-2">{post.tags.join(' ')}</p>
+                <p className="text-[14px] text-[#6C5CE7] font-medium mb-2">{post.tags.join(' ')}</p>
                 <p className="text-[12px] text-gray-500 font-medium">{post.time}</p>
               </div>
             </div>
@@ -220,7 +220,7 @@ const HomeView = ({ onNotificationClick }) => {
         ) : (
           // --- Twitter/X Style Democracy Feed ---
           MOCK_TWEETS.map(tweet => (
-            <div key={tweet.id} className="flex gap-3 px-4 py-4 border-b border-white/[0.08] hover:bg-[#0F0F12]/50 transition-colors cursor-pointer">
+            <div key={tweet.id} className="flex gap-3 px-4 py-4 border-b border-white/[0.06] hover:bg-[#111827]/50 transition-colors cursor-pointer">
               <img src={tweet.avatar} alt={tweet.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
               <div className="flex flex-col flex-1 min-w-0">
 
@@ -234,7 +234,7 @@ const HomeView = ({ onNotificationClick }) => {
                 <p className="text-[15px] text-gray-200 mt-1 leading-relaxed">{tweet.content}</p>
 
                 {tweet.image && (
-                  <img src={tweet.image} alt="Tweet media" className="mt-3 w-full rounded-2xl border border-white/[0.08] object-cover max-h-[300px]" />
+                  <img src={tweet.image} alt="Tweet media" className="mt-3 w-full rounded-2xl border border-white/[0.06] object-cover max-h-[300px]" />
                 )}
 
                 <div className="flex justify-between items-center mt-3 pr-6 text-gray-500">
@@ -250,8 +250,8 @@ const HomeView = ({ onNotificationClick }) => {
                     <div className="p-1.5 rounded-full group-hover:bg-rose-500/10"><Heart size={16} /></div>
                     <span className="text-[13px]">{tweet.likes}</span>
                   </button>
-                  <button className="flex items-center gap-1.5 hover:text-[#A855F7] transition-colors group">
-                    <div className="p-1.5 rounded-full group-hover:bg-[#A855F7]/10"><Share size={16} /></div>
+                  <button className="flex items-center gap-1.5 hover:text-[#6C5CE7] transition-colors group">
+                    <div className="p-1.5 rounded-full group-hover:bg-[#6C5CE7]/10"><Share size={16} /></div>
                   </button>
                 </div>
 
@@ -265,8 +265,8 @@ const HomeView = ({ onNotificationClick }) => {
 };
 
 const NotificationsView = ({ onBack }) => (
-  <div className="flex flex-col h-full bg-[#050505] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    <div className="flex items-center px-4 py-4 sticky top-0 bg-[#050505] z-20 border-b border-white/[0.08]">
+  <div className="flex flex-col h-full bg-[#0B0F14] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="flex items-center px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <IconButton icon={ChevronLeft} onClick={onBack} className="-ml-2" />
       <h1 className="text-xl font-bold text-white tracking-tight ml-2">Notifications</h1>
     </div>
@@ -280,7 +280,7 @@ const NotificationsView = ({ onBack }) => (
         {MOCK_NOTIFICATIONS.thisWeek.map(notif => (
           <div key={notif.id} className="flex items-center gap-3">
             {notif.isTextAvatar ? (
-              <div className="w-11 h-11 rounded-full border border-blue-500/50 flex items-center justify-center text-white text-[16px] font-semibold bg-[#050505] flex-shrink-0">
+              <div className="w-11 h-11 rounded-full border border-blue-500/50 flex items-center justify-center text-white text-[16px] font-semibold bg-[#0B0F14] flex-shrink-0">
                 {notif.initial}
               </div>
             ) : (
@@ -298,7 +298,7 @@ const NotificationsView = ({ onBack }) => (
         {MOCK_NOTIFICATIONS.thisMonth.map(notif => (
           <div key={notif.id} className="flex items-center gap-3">
             {notif.isTextAvatar ? (
-              <div className="w-11 h-11 rounded-full border border-blue-500/50 flex items-center justify-center text-white text-[15px] font-semibold bg-[#050505] flex-shrink-0">
+              <div className="w-11 h-11 rounded-full border border-blue-500/50 flex items-center justify-center text-white text-[15px] font-semibold bg-[#0B0F14] flex-shrink-0">
                 {notif.initial}
               </div>
             ) : (
@@ -315,8 +315,8 @@ const NotificationsView = ({ onBack }) => (
 );
 
 const SoosView = () => (
-  <div className="h-full bg-[#050505] flex flex-col">
-    <div className="flex-1 relative overflow-hidden rounded-b-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.6)] z-10 border-b border-white/[0.08]">
+  <div className="h-full bg-[#0B0F14] flex flex-col">
+    <div className="flex-1 relative overflow-hidden rounded-b-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.6)] z-10 border-b border-white/[0.06]">
       <img
         src="https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?w=800&h=1600&fit=crop"
         className="absolute inset-0 w-full h-full object-cover"
@@ -358,13 +358,13 @@ const SoosView = () => (
       </div>
     </div>
 
-    <div className="h-[96px] w-full flex-none bg-[#050505]"></div>
+    <div className="h-[96px] w-full flex-none bg-[#0B0F14]"></div>
   </div>
 );
 
 const ChatsListView = ({ onChatSelect }) => (
-  <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#050505] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    <div className="px-4 py-4 sticky top-0 bg-[#050505] z-20 border-b border-white/[0.08]">
+  <div className="flex flex-col h-full overflow-y-auto pb-32 bg-[#0B0F14] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold text-white tracking-tight">Chats</h1>
         <div className="flex items-center gap-4">
@@ -373,7 +373,7 @@ const ChatsListView = ({ onChatSelect }) => (
         </div>
       </div>
 
-      <div className="flex items-center gap-3 bg-[#0F0F12] px-4 py-2.5 rounded-xl border border-white/[0.08] mb-4">
+      <div className="flex items-center gap-3 bg-[#111827] px-4 py-2.5 rounded-xl border border-white/[0.06] mb-4">
         <Search className="text-gray-400" size={18} />
         <input
           type="text"
@@ -382,7 +382,7 @@ const ChatsListView = ({ onChatSelect }) => (
         />
       </div>
 
-      <div className="flex bg-[#0F0F12] p-1 rounded-xl border border-white/[0.08]">
+      <div className="flex bg-[#111827] p-1 rounded-xl border border-white/[0.06]">
         <button className="flex-1 py-1.5 flex justify-center items-center bg-[#1A2235] rounded-lg shadow-sm text-white text-[13px] font-semibold transition-all">
           Private
         </button>
@@ -394,20 +394,20 @@ const ChatsListView = ({ onChatSelect }) => (
 
     <div className="flex flex-col mt-4 mb-2">
       <h2 className="px-4 text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3">Active Now</h2>
-      <div className="flex gap-3 overflow-x-auto px-4 pb-4 border-b border-white/[0.08] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <div className="flex flex-col items-center justify-center min-w-[68px] h-[86px] rounded-2xl bg-[#0F0F12] border border-white/[0.08] border-dashed cursor-pointer hover:bg-white/5 transition-colors">
+      <div className="flex gap-3 overflow-x-auto px-4 pb-4 border-b border-white/[0.06] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex flex-col items-center justify-center min-w-[68px] h-[86px] rounded-2xl bg-[#111827] border border-white/[0.08] border-dashed cursor-pointer hover:bg-white/5 transition-colors">
           <Plus size={20} className="text-gray-400" />
           <span className="text-[10px] text-gray-400 font-medium mt-2">New</span>
         </div>
 
         {MOCK_USERS.filter(u => !u.isMe && u.hasStory).map(user => (
-          <div key={user.id} className="relative flex flex-col items-center justify-center min-w-[68px] h-[86px] rounded-2xl bg-[#0F0F12] border border-white/[0.08] overflow-hidden cursor-pointer group hover:border-[#A855F7]/50 transition-colors">
+          <div key={user.id} className="relative flex flex-col items-center justify-center min-w-[68px] h-[86px] rounded-2xl bg-[#111827] border border-white/[0.06] overflow-hidden cursor-pointer group hover:border-[#6C5CE7]/50 transition-colors">
             <img src={user.avatar} className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity blur-[2px]" alt="bg" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F14]/90 via-[#0B0F14]/40 to-transparent"></div>
 
             <img src={user.avatar} className="w-9 h-9 rounded-full border border-white/20 z-10 mb-1" alt="avatar" />
             <span className="text-[11px] text-white font-medium z-10 truncate w-[80%] text-center tracking-tight">{user.user.split(' ')[0]}</span>
-            <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-500 rounded-full border border-[#050505]"></div>
+            <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-500 rounded-full border border-[#0B0F14]"></div>
           </div>
         ))}
       </div>
@@ -419,21 +419,21 @@ const ChatsListView = ({ onChatSelect }) => (
           key={chat.id}
           onClick={() => onChatSelect(chat)}
           className={`flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer transition-colors ${chat.unread > 0
-            ? 'bg-[#0F0F12] border border-white/[0.08]'
-            : 'bg-transparent hover:bg-[#0F0F12]/50 border border-transparent'
+            ? 'bg-[#111827] border border-white/[0.06]'
+            : 'bg-transparent hover:bg-[#111827]/50 border border-transparent'
             }`}
         >
           <div className="relative flex-shrink-0">
             <img src={chat.avatar} alt={chat.name} className="w-[50px] h-[50px] rounded-[14px] object-cover" />
             {chat.hasStory && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#A855F7] border-[2.5px] border-[#050505] rounded-full"></span>
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#6C5CE7] border-[2.5px] border-[#0B0F14] rounded-full"></span>
             )}
           </div>
 
           <div className="flex flex-col flex-1 min-w-0 justify-center">
             <div className="flex justify-between items-center mb-0.5">
               <h3 className={`text-[15px] tracking-tight truncate pr-2 ${chat.unread > 0 ? 'text-white font-bold' : 'text-gray-300 font-semibold'}`}>{chat.name}</h3>
-              <span className={`text-[12px] whitespace-nowrap ${chat.unread > 0 ? 'text-[#A855F7] font-semibold' : 'text-gray-500'}`}>{chat.time}</span>
+              <span className={`text-[12px] whitespace-nowrap ${chat.unread > 0 ? 'text-[#6C5CE7] font-semibold' : 'text-gray-500'}`}>{chat.time}</span>
             </div>
             <div className="flex justify-between items-center">
               <p className={`text-[13px] leading-snug truncate pr-4 ${chat.unread > 0 ? 'text-gray-200 font-medium' : 'text-gray-500'}`}>{chat.msg}</p>
@@ -446,8 +446,8 @@ const ChatsListView = ({ onChatSelect }) => (
 );
 
 const ChatDetailView = ({ chat, onBack }) => (
-  <div className="flex flex-col h-full bg-[#050505]">
-    <div className="flex items-center justify-between px-4 py-4 bg-[#050505] border-b border-white/[0.08] z-20">
+  <div className="flex flex-col h-full bg-[#0B0F14]">
+    <div className="flex items-center justify-between px-4 py-4 bg-[#0B0F14] border-b border-white/[0.06] z-20">
       <div className="flex items-center gap-3">
         <IconButton icon={ChevronLeft} onClick={onBack} className="-ml-2" />
         <img src={chat.avatar} alt={chat.name} className="w-10 h-10 rounded-[12px] object-cover" />
@@ -467,24 +467,24 @@ const ChatDetailView = ({ chat, onBack }) => (
 
     <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div className="flex justify-center my-4">
-        <span className="text-[12px] font-medium text-gray-500 bg-[#0F0F12] px-3 py-1 rounded-full border border-white/[0.08]">18 Mar 2026, 10:42 AM</span>
+        <span className="text-[12px] font-medium text-gray-500 bg-[#111827] px-3 py-1 rounded-full border border-white/[0.06]">18 Mar 2026, 10:42 AM</span>
       </div>
 
       <div className="flex justify-start">
-        <div className="max-w-[75%] bg-[#0F0F12] border border-white/[0.08] text-white rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+        <div className="max-w-[75%] bg-[#111827] border border-white/[0.06] text-white rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
           <p className="text-[14px] leading-relaxed">Hey, are we still meeting later?</p>
         </div>
       </div>
 
       <div className="flex justify-end">
-        <div className="max-w-[75%] bg-[#A855F7] text-white rounded-2xl rounded-br-sm px-4 py-3 shadow-sm">
+        <div className="max-w-[75%] bg-[#6C5CE7] text-white rounded-2xl rounded-br-sm px-4 py-3 shadow-sm">
           <p className="text-[14px] leading-relaxed">{chat.msg}</p>
         </div>
       </div>
     </div>
 
-    <div className="px-4 py-4 bg-[#050505] border-t border-white/[0.08] pb-8">
-      <div className="flex items-center gap-2 bg-[#0F0F12] rounded-2xl p-1.5 border border-white/[0.08] focus-within:border-white/[0.15] transition-colors">
+    <div className="px-4 py-4 bg-[#0B0F14] border-t border-white/[0.06] pb-8">
+      <div className="flex items-center gap-2 bg-[#111827] rounded-2xl p-1.5 border border-white/[0.06] focus-within:border-white/[0.15] transition-colors">
         <button className="p-2.5 bg-[#1A2235] rounded-xl flex-shrink-0 hover:bg-white/10 transition-colors">
           <Plus size={18} className="text-gray-300" />
         </button>
@@ -493,7 +493,7 @@ const ChatDetailView = ({ chat, onBack }) => (
           placeholder="Type a message..."
           className="w-full bg-transparent text-white text-[14px] outline-none placeholder-gray-500 px-2"
         />
-        <button className="p-2.5 bg-[#A855F7] rounded-xl flex-shrink-0 text-white hover:bg-[#5a4cdb] transition-colors shadow-sm">
+        <button className="p-2.5 bg-[#6C5CE7] rounded-xl flex-shrink-0 text-white hover:bg-[#5a4cdb] transition-colors shadow-sm">
           <Send size={18} className="-ml-0.5 mt-0.5" />
         </button>
       </div>
@@ -502,8 +502,8 @@ const ChatDetailView = ({ chat, onBack }) => (
 );
 
 const ProfileView = ({ onSettingsClick }) => (
-  <div className="flex flex-col h-full bg-[#050505] overflow-y-auto pb-32 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    <div className="flex justify-between items-center px-4 py-4 sticky top-0 bg-[#050505] z-20 border-b border-white/[0.08]">
+  <div className="flex flex-col h-full bg-[#0B0F14] overflow-y-auto pb-32 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="flex justify-between items-center px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <div className="flex items-center gap-2 text-xl font-bold text-white tracking-tight">
         Profile
       </div>
@@ -517,26 +517,26 @@ const ProfileView = ({ onSettingsClick }) => (
       <div className="flex justify-between items-start">
         <div className="flex flex-col max-w-[65%]">
           <h1 className="text-2xl font-bold text-white tracking-tight leading-tight">{MOCK_USER.name}</h1>
-          <p className="text-[14px] font-medium text-[#A855F7] mt-1 mb-3">@{MOCK_USER.username}</p>
+          <p className="text-[14px] font-medium text-[#6C5CE7] mt-1 mb-3">@{MOCK_USER.username}</p>
           <p className="text-[14px] text-gray-300 leading-relaxed">{MOCK_USER.bio}</p>
         </div>
 
         <StoryRing hasStory={true} className="p-[2px] flex-shrink-0">
-          <img src={MOCK_USER.avatar} alt="Profile" className="w-[84px] h-[84px] rounded-full object-cover border-4 border-[#050505]" />
+          <img src={MOCK_USER.avatar} alt="Profile" className="w-[84px] h-[84px] rounded-full object-cover border-4 border-[#0B0F14]" />
         </StoryRing>
       </div>
 
-      <div className="flex items-center justify-between bg-[#0F0F12] border border-white/[0.08] rounded-2xl px-6 py-4">
+      <div className="flex items-center justify-between bg-[#111827] border border-white/[0.06] rounded-2xl px-6 py-4">
         <div className="flex flex-col items-center">
           <span className="font-bold text-[18px] text-white">{MOCK_USER.posts}</span>
           <span className="text-[12px] text-gray-500 font-medium">Posts</span>
         </div>
-        <div className="w-[1px] h-8 bg-white/[0.08]"></div>
+        <div className="w-[1px] h-8 bg-white/[0.06]"></div>
         <div className="flex flex-col items-center">
           <span className="font-bold text-[18px] text-white">{MOCK_USER.followers}</span>
           <span className="text-[12px] text-gray-500 font-medium">Followers</span>
         </div>
-        <div className="w-[1px] h-8 bg-white/[0.08]"></div>
+        <div className="w-[1px] h-8 bg-white/[0.06]"></div>
         <div className="flex flex-col items-center">
           <span className="font-bold text-[18px] text-white">{MOCK_USER.following}</span>
           <span className="text-[12px] text-gray-500 font-medium">Following</span>
@@ -544,17 +544,17 @@ const ProfileView = ({ onSettingsClick }) => (
       </div>
 
       <div className="flex gap-3">
-        <button className="flex-1 bg-white text-[#050505] rounded-xl font-bold py-2.5 text-[14px] active:scale-[0.98] transition-transform">
+        <button className="flex-1 bg-white text-[#0B0F14] rounded-xl font-bold py-2.5 text-[14px] active:scale-[0.98] transition-transform">
           Edit profile
         </button>
-        <button className="flex-1 bg-[#0F0F12] rounded-xl font-bold text-white py-2.5 text-[14px] border border-white/[0.08] active:bg-[#1A2235] transition-colors">
+        <button className="flex-1 bg-[#111827] rounded-xl font-bold text-white py-2.5 text-[14px] border border-white/[0.06] active:bg-[#1A2235] transition-colors">
           Share profile
         </button>
       </div>
     </div>
 
     <div className="px-4 pb-3">
-      <div className="flex bg-[#0F0F12] p-1 rounded-xl border border-white/[0.08]">
+      <div className="flex bg-[#111827] p-1 rounded-xl border border-white/[0.06]">
         <button className="flex-1 py-2 flex justify-center items-center gap-2 bg-[#1A2235] rounded-lg shadow-sm text-white transition-all">
           <Grid size={18} />
           <span className="text-[13px] font-semibold">Posts</span>
@@ -567,7 +567,7 @@ const ProfileView = ({ onSettingsClick }) => (
     </div>
 
     <div className="flex flex-col items-center justify-center pt-10 text-gray-500">
-      <div className="p-5 rounded-2xl bg-[#0F0F12] border border-white/[0.08] mb-4">
+      <div className="p-5 rounded-2xl bg-[#111827] border border-white/[0.06] mb-4">
         <Grid size={28} className="text-gray-400" />
       </div>
       <p className="font-semibold text-[15px] text-white">No posts yet</p>
@@ -577,21 +577,21 @@ const ProfileView = ({ onSettingsClick }) => (
 );
 
 const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
-  <div className="flex flex-col h-full bg-[#050505] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    <div className="flex items-center px-4 py-4 sticky top-0 bg-[#050505] z-20 border-b border-white/[0.08]">
+  <div className="flex flex-col h-full bg-[#0B0F14] overflow-y-auto pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className="flex items-center px-4 py-4 sticky top-0 bg-[#0B0F14] z-20 border-b border-white/[0.06]">
       <IconButton icon={ChevronLeft} onClick={onBack} className="-ml-2" />
       <h1 className="text-xl font-bold text-white tracking-tight ml-2">Settings</h1>
     </div>
 
     <div className="flex flex-col px-4 py-6 gap-6">
-      <div className="flex items-center gap-3 bg-[#0F0F12] px-4 py-3 rounded-lg border border-white/[0.08]">
+      <div className="flex items-center gap-3 bg-[#111827] px-4 py-3 rounded-lg border border-white/[0.06]">
         <Search className="text-gray-400" size={18} />
         <input type="text" placeholder="Search settings" className="bg-transparent border-none text-white outline-none w-full placeholder-gray-500 text-[14px]" />
       </div>
 
       <div className="flex flex-col gap-3">
         <h2 className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider ml-1">Your account</h2>
-        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="bg-[#111827] rounded-xl border border-white/[0.06] overflow-hidden">
           <button className="w-full flex items-center justify-between p-4 active:bg-[#1A2235] transition-colors">
             <div className="flex items-center gap-3"><User size={20} className="text-white" /><span className="text-white text-[14px] font-medium">Account center</span></div>
             <ChevronLeft size={20} className="text-gray-500 rotate-180" />
@@ -601,8 +601,8 @@ const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
 
       <div className="flex flex-col gap-3">
         <h2 className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider ml-1">App settings</h2>
-        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
-          <button className="w-full flex items-center justify-between p-4 border-b border-white/[0.08] active:bg-[#1A2235] transition-colors">
+        <div className="bg-[#111827] rounded-xl border border-white/[0.06] overflow-hidden">
+          <button className="w-full flex items-center justify-between p-4 border-b border-white/[0.06] active:bg-[#1A2235] transition-colors">
             <div className="flex items-center gap-3"><Bell size={20} className="text-white" /><span className="text-white text-[14px] font-medium">Notifications</span></div>
             <ChevronLeft size={20} className="text-gray-500 rotate-180" />
           </button>
@@ -612,7 +612,7 @@ const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
             onClick={toggleDarkMode}
           >
             <div className="flex items-center gap-3"><Moon size={20} className="text-white" /><span className="text-white text-[14px] font-medium">Dark mode</span></div>
-            <div className={`w-11 h-6 rounded-full p-0.5 flex transition-colors duration-300 ${isDarkMode ? 'bg-[#A855F7]' : 'bg-gray-600'}`}>
+            <div className={`w-11 h-6 rounded-full p-0.5 flex transition-colors duration-300 ${isDarkMode ? 'bg-[#6C5CE7]' : 'bg-gray-600'}`}>
               <div className={`w-5 h-5 bg-white rounded-full shadow-sm transform transition-transform duration-300 ${isDarkMode ? 'translate-x-5' : 'translate-x-0'}`}></div>
             </div>
           </div>
@@ -620,7 +620,7 @@ const SettingsView = ({ onBack, isDarkMode, toggleDarkMode }) => (
       </div>
 
       <div className="flex flex-col gap-3">
-        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="bg-[#111827] rounded-xl border border-white/[0.06] overflow-hidden">
           <button className="w-full flex items-center justify-between p-4 active:bg-[#1A2235] transition-colors">
             <div className="flex items-center gap-3 text-red-500"><LogOut size={20} /><span className="text-[14px] font-semibold">Log out</span></div>
           </button>
@@ -661,14 +661,8 @@ export default function App() {
   ];
 
   return (
-    <div className="bg-[#020202] w-full min-h-screen flex justify-center items-center font-sans tracking-tight overflow-hidden selection:bg-[#A855F7]/30 relative">
-      {/* Premium Mesh Glow Background for Desktop */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#A855F7]/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#6366F1]/10 blur-[120px] rounded-full" />
-      </div>
-
-      <div className="w-full h-[100dvh] sm:h-[92vh] sm:max-w-[430px] md:max-w-[450px] lg:max-w-[480px] sm:rounded-[3rem] sm:border-[8px] border-[#0F0F12] overflow-hidden relative shadow-2xl bg-[#050505] flex flex-col transition-all duration-500 ease-in-out z-10">
+    <div className="bg-black w-full min-h-screen flex justify-center items-center font-sans tracking-tight overflow-hidden selection:bg-[#6C5CE7]/30">
+      <div className="w-full h-[100dvh] sm:h-[92vh] sm:max-w-[430px] md:max-w-[450px] lg:max-w-[480px] sm:rounded-[3rem] sm:border-[8px] border-[#111827] overflow-hidden relative shadow-2xl bg-[#0B0F14] flex flex-col transition-all duration-500 ease-in-out">
 
         <div className="flex-1 overflow-hidden relative z-0 flex flex-col">
           {renderContent()}
@@ -677,7 +671,7 @@ export default function App() {
         {/* Floating Blurred Pill Navbar - 30% Opacity Glassmorphism */}
         {!activeChat && !showSettings && !showNotifications && (
           <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none px-6">
-            <nav className="pointer-events-auto bg-[#0F0F12]/30 backdrop-blur-2xl border border-white/[0.15] rounded-full flex justify-between items-center px-6 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full max-w-[340px] md:max-w-[380px] gap-4">
+            <nav className="pointer-events-auto bg-[#111827]/30 backdrop-blur-2xl border border-white/[0.15] rounded-full flex justify-between items-center px-6 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full max-w-[340px] md:max-w-[380px] gap-4">
               {navItems.map((item) => {
                 const isActive = activeTab === item.id;
                 const Icon = item.icon;
