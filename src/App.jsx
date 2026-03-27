@@ -134,6 +134,17 @@ const MOCK_PULSE_POSTS = [
 const MOCK_COMMENTS = [{ id: 1, user: 'alex_dev', avatar: IMG2, text: 'This looks incredibly clean! 🔥', time: '2h', likes: 12 }];
 const PULSE_CHANNELS = [{ id: 1, name: 'Global Tech Trends', members: '1.2M', icon: Globe }, { id: 2, name: 'Design Innovations', members: '850K', icon: Edit3 }];
 const MOCK_NOTIFICATIONS = [{ id: 1, user: 'raw_aadiii25', avatar: IMG2, action: 'started following you', time: '3 hours' }];
+const MOCK_ACTIVE_USERS = [
+  { id: 1, name: 'omnexia', avatar: IMG1, online: true },
+  { id: 2, name: 'yash-pat...', avatar: IMG2, online: true },
+  { id: 3, name: 'thakur_a...', avatar: IMG3, online: true },
+  { id: 4, name: 'darkside', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop', online: true },
+  { id: 5, name: 'arice', avatar: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=150&h=150&fit=crop', online: true },
+];
+const MOCK_REQUESTS = [
+  { id: 1, name: 'thakur_abhaysingh04_', msg: 'Hey, I would like to connect!', time: '21-Feb-2026', avatar: IMG3 },
+  { id: 2, name: 'yash-pathik', msg: 'Sent you a chat request', time: '19-Feb-2026', avatar: IMG2 },
+];
 
 // --- Sub-Views ---
 
@@ -588,34 +599,166 @@ const SoosView = () => (
   </div>
 );
 
-const ChatsListView = ({ onChatSelect }) => (
-  <div className="flex flex-col h-full overflow-y-auto pb-32 bg-gray-50 dark:bg-[#05070A] [&::-webkit-scrollbar]:hidden">
-    <div className="px-4 py-4 sticky top-0 bg-white/90 dark:bg-[#0B0F14]/90 backdrop-blur-xl z-20 border-b border-black/5 dark:border-white/[0.08]">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Chats</h1>
-        <div className="flex items-center gap-3"><IconButton icon={Phone} /><IconButton icon={Video} /><IconButton icon={Edit3} /></div>
-      </div>
-      <div className="flex items-center gap-3 bg-gray-100 dark:bg-[#111827] px-4 py-2.5 rounded-xl border border-black/5 mb-4 shadow-inner">
-        <Search className="text-gray-500" size={18} />
-        <input type="text" placeholder="Search messages" className="bg-transparent text-gray-900 dark:text-white w-full outline-none text-[14px]" />
-      </div>
-    </div>
-    <div className="flex flex-col gap-1.5 px-3 pt-2">
-      {MOCK_CHATS.map((chat) => (
-        <div key={chat.id} onClick={() => onChatSelect(chat)} className={`flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer ${chat.unread > 0 ? 'bg-white dark:bg-[#111827] shadow-sm' : 'bg-transparent'}`}>
-          <img src={chat.avatar} alt="Avatar" className="w-[50px] h-[50px] rounded-[16px] object-cover" />
-          <div className="flex flex-col flex-1 min-w-0 justify-center">
-            <div className="flex justify-between items-center mb-0.5">
-              <h3 className={`text-[15px] truncate pr-2 ${chat.unread > 0 ? 'text-gray-900 dark:text-white font-bold' : 'text-gray-700 dark:text-gray-300 font-bold'}`}>{chat.name}</h3>
-              <span className={`text-[12px] whitespace-nowrap ${chat.unread > 0 ? 'text-[#6C5CE7] dark:text-[#00D1FF] font-bold' : 'text-gray-500 font-medium'}`}>{chat.time}</span>
-            </div>
-            <p className={`text-[13px] truncate pr-4 ${chat.unread > 0 ? 'text-gray-800 dark:text-gray-200 font-semibold' : 'text-gray-500 font-medium'}`}>{chat.msg}</p>
+const ChatsListView = ({ onChatSelect }) => {
+  const [chatTab, setChatTab] = useState('private');
+
+  return (
+    <div className="flex flex-col h-full overflow-y-auto pb-32 bg-white dark:bg-[#05070A] [&::-webkit-scrollbar]:hidden transition-colors duration-300">
+      {/* Header */}
+      <div className="px-6 py-6 sticky top-0 bg-white/90 dark:bg-[#05070A]/90 backdrop-blur-xl z-20 border-b border-black/5 dark:border-white/[0.08] transition-colors duration-300">
+        <div className="flex justify-between items-end mb-6">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Chats</h1>
+          <div className="flex items-center gap-3">
+            <button className="w-10 h-10 rounded-full bg-gray-900 dark:bg-white/10 flex items-center justify-center text-white border border-black/10 dark:border-white/20 active:scale-95 transition-all">
+              <Edit3 size={20} strokeWidth={1.5} />
+            </button>
           </div>
         </div>
-      ))}
+
+        {/* Search */}
+        <div className="flex items-center gap-3 bg-gray-100 dark:bg-[#111A2C] px-5 py-3.5 rounded-2xl border border-black/5 dark:border-white/5 mb-6 shadow-sm dark:shadow-2xl transition-colors duration-300">
+          <Search className="text-gray-400 dark:text-gray-500" size={20} />
+          <input 
+            type="text" 
+            placeholder="Search messages" 
+            className="bg-transparent text-gray-900 dark:text-white w-full outline-none text-[15px] placeholder-gray-400 dark:placeholder-gray-500 font-medium" 
+          />
+        </div>
+
+        {/* Tabs */}
+        <div className="flex bg-gray-100 dark:bg-[#111A2C]/50 p-1.5 rounded-2xl border border-black/5 dark:border-white/5 gap-1 shadow-inner overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden transition-colors duration-300">
+          <button 
+            onClick={() => setChatTab('private')} 
+            className={`flex-1 py-2.5 rounded-xl text-[14px] font-bold transition-all duration-300 ${chatTab === 'private' ? 'bg-white dark:bg-[#1D283A] text-gray-900 dark:text-white shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+          >
+            Private
+          </button>
+          <button 
+            onClick={() => setChatTab('public')} 
+            className={`flex-1 py-2.5 rounded-xl text-[14px] font-bold transition-all duration-300 ${chatTab === 'public' ? 'bg-white dark:bg-[#1D283A] text-gray-900 dark:text-white shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+          >
+            Public
+          </button>
+          <button 
+            onClick={() => setChatTab('request')} 
+            className={`flex-1 py-2.5 rounded-xl text-[14px] font-bold transition-all duration-300 flex items-center justify-center gap-2 ${chatTab === 'request' ? 'bg-white dark:bg-[#1D283A] text-gray-900 dark:text-white shadow-md' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
+          >
+            Request
+            {MOCK_REQUESTS.length > 0 && (
+              <span className="bg-[#6C5CE7] text-white text-[10px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                {MOCK_REQUESTS.length}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-col px-6 pt-2">
+        {chatTab === 'private' && (
+          <>
+            {/* Active Now Section */}
+            <div className="mb-8">
+              <h2 className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Active Now</h2>
+              <div className="flex gap-4 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden">
+                <div className="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer group">
+                  <div className="w-16 h-16 rounded-[24px] bg-gray-50 dark:bg-white/5 border border-dashed border-black/10 dark:border-white/20 flex items-center justify-center text-gray-400 dark:text-white group-hover:bg-gray-100 dark:group-hover:bg-white/10 transition-colors">
+                    <Plus size={24} />
+                  </div>
+                  <span className="text-[11px] font-bold text-gray-400">New</span>
+                </div>
+                {MOCK_ACTIVE_USERS.map((u) => (
+                  <div key={u.id} className="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer">
+                    <div className="relative">
+                      <div className="w-16 h-16 rounded-[24px] border border-black/5 dark:border-white/10 p-0.5 overflow-hidden bg-gray-100 dark:bg-gray-900">
+                        <img src={u.avatar} className="w-full h-full rounded-[22px] object-cover" alt={u.name} />
+                      </div>
+                      <div className="absolute top-1 right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white dark:border-[#05070A]"></div>
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 truncate w-14 text-center">{u.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Chat List */}
+            <div className="flex flex-col gap-6">
+              {MOCK_CHATS.map((chat) => (
+                <div key={chat.id} onClick={() => onChatSelect(chat)} className="flex items-center gap-4 cursor-pointer group hover:bg-gray-50 dark:hover:bg-white/[0.02] -mx-2 px-2 py-2 rounded-2xl transition-colors">
+                  <div className="relative">
+                    <div className={`w-14 h-14 rounded-full p-[2px] ${chat.hasStory ? 'bg-[#6C5CE7]' : 'border border-black/5 dark:border-white/10'}`}>
+                      <img src={chat.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover border-2 border-white dark:border-[#05070A]" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <div className="flex justify-between items-baseline mb-0.5">
+                      <h3 className="text-[16px] font-bold text-gray-900 dark:text-white truncate pr-2 tracking-tight">{chat.name}</h3>
+                      <span className="text-[12px] text-gray-400 dark:text-gray-500 font-medium">{chat.time}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      {chat.unread > 0 && <div className="w-2 h-2 bg-[#6C5CE7] rounded-full flex-shrink-0"></div>}
+                      <p className={`text-[14px] truncate pr-4 ${chat.unread > 0 ? 'text-gray-900 dark:text-white font-bold' : 'text-gray-500 font-medium'}`}>{chat.msg}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {chatTab === 'public' && (
+          <div className="py-20 flex flex-col items-center justify-center gap-4 text-center">
+            <div className="w-20 h-20 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 dark:text-gray-600">
+              <Globe size={40} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Public Chats</h3>
+              <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">No public conversations yet.</p>
+            </div>
+          </div>
+        )}
+
+        {chatTab === 'request' && (
+          <div className="flex flex-col gap-6 pt-2 pb-10">
+            {MOCK_REQUESTS.map((req) => (
+              <div key={req.id} className="bg-white dark:bg-[#111A2C]/60 border border-black/5 dark:border-white/5 rounded-3xl p-5 shadow-sm dark:shadow-xl flex flex-col gap-5 transition-colors duration-300">
+                <div className="flex items-center gap-4">
+                  <img src={req.avatar} className="w-14 h-14 rounded-2xl object-cover border border-black/5 dark:border-white/10 shadow-sm" alt={req.name} />
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <h3 className="text-[16px] font-bold text-gray-900 dark:text-white truncate tracking-tight">{req.name}</h3>
+                    <span className="text-[12px] text-gray-400 dark:text-gray-500 font-medium">{req.time}</span>
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-4 border border-black/5 dark:border-white/5">
+                  <p className="text-[14px] text-gray-600 dark:text-gray-300 font-medium leading-relaxed italic">"{req.msg}"</p>
+                </div>
+                <div className="flex gap-3 pt-1">
+                  <button className="flex-1 py-3.5 rounded-2xl bg-gray-100 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white font-bold text-[14px] active:scale-95 transition-all hover:bg-gray-200 dark:hover:bg-white/10">
+                    Reject
+                  </button>
+                  <button className="flex-1 py-3.5 rounded-2xl bg-[#6C5CE7] hover:bg-[#5b4dbd] text-white font-bold text-[14px] shadow-lg active:scale-95 transition-all">
+                    Accept
+                  </button>
+                </div>
+              </div>
+            ))}
+            {MOCK_REQUESTS.length === 0 && (
+              <div className="py-20 flex flex-col items-center justify-center gap-4 text-center">
+                <div className="w-20 h-20 rounded-full bg-gray-50 dark:bg-white/5 flex items-center justify-center text-gray-400 dark:text-gray-600">
+                  <User size={40} />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">No Requests</h3>
+                  <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">You don't have any chat requests yet.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ChatDetailView = ({ chat, onBack }) => (
   <div className="flex flex-col h-full bg-gray-50 dark:bg-[#0B0F14]">
