@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Bell, Bookmark, Calendar, CheckCircle2, ChevronLeft, Clapperboard, Compass, Edit3, Globe, Grid, Heart, HelpCircle, Home, Image, Info, LogOut, MapPin, MessageCircle, MessageCircleMore, MessageSquare, Mic, Moon, MoreHorizontal, MoreVertical, Phone, PhoneCall, PhoneIncoming, PhoneMissed, Play, Plus, Repeat, Search, Send, Settings, Share, Shield, Star, Tag, User, UserX, Video, VideoOff, X
 } from 'lucide-react';
@@ -95,7 +95,7 @@ const MOCK_FOLLOWING = [
   { id: 6, user: 'kiara_singh_1242', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop' },
 ];
 
-const MOCK_DEMOCRACY_POSTS = [
+const MOCK_PULSE_POSTS = [
   {
     id: 1,
     name: 'Alex Developer',
@@ -132,7 +132,7 @@ const MOCK_DEMOCRACY_POSTS = [
   },
 ];
 const MOCK_COMMENTS = [{ id: 1, user: 'alex_dev', avatar: IMG2, text: 'This looks incredibly clean! 🔥', time: '2h', likes: 12 }];
-const DEMOCRACY_CHANNELS = [{ id: 1, name: 'Global Tech Trends', members: '1.2M', icon: Globe }, { id: 2, name: 'Design Innovations', members: '850K', icon: Edit3 }];
+const PULSE_CHANNELS = [{ id: 1, name: 'Global Tech Trends', members: '1.2M', icon: Globe }, { id: 2, name: 'Design Innovations', members: '850K', icon: Edit3 }];
 const MOCK_NOTIFICATIONS = [{ id: 1, user: 'raw_aadiii25', avatar: IMG2, action: 'started following you', time: '3 hours' }];
 
 // --- Sub-Views ---
@@ -149,8 +149,8 @@ const CreatePostView = ({ onBack }) => {
         <button className="bg-[#00D1FF] text-white px-5 py-1.5 rounded-full text-[14px] font-bold shadow-md hover:bg-blue-400">Next</button>
       </div>
       <div className="flex px-5 py-3 gap-6 border-b border-black/5 dark:border-white/[0.04] z-10 bg-white dark:bg-[#0B0F14]">
-        <button onClick={() => setActiveTab('recent')} className={`text-[14px] font-bold pb-1 ${activeTab === 'recent' ? 'text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white' : 'text-gray-500'}`}>Recent</button>
-        <button onClick={() => setActiveTab('democracy')} className={`text-[14px] font-bold pb-1 ${activeTab === 'democracy' ? 'text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white' : 'text-gray-500'}`}>Democracy</button>
+        <button onClick={() => setActiveTab('recent')} className={`text-[14px] font-bold pb-1 ${activeTab === 'recent' ? 'text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white' : 'text-gray-500'}`}>For you</button>
+        <button onClick={() => setActiveTab('pulse')} className={`text-[14px] font-bold pb-1 ${activeTab === 'pulse' ? 'text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white' : 'text-gray-500'}`}>Pulse</button>
       </div>
 
       {activeTab === 'recent' ? (
@@ -165,37 +165,46 @@ const CreatePostView = ({ onBack }) => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-[#05070A] px-4 py-6 pb-24">
-          <div className="flex flex-col mb-6 text-center px-4">
-            <div className="w-16 h-16 bg-[#6C5CE7]/10 dark:bg-[#00D1FF]/10 rounded-full flex items-center justify-center mx-auto mb-3"><Globe size={32} className="text-[#6C5CE7] dark:text-[#00D1FF]" /></div>
-            <h2 className="text-[18px] font-bold text-gray-900 dark:text-white tracking-tight">Post to Democracy</h2>
-            <p className="text-[13px] text-gray-500 mt-1 font-medium">Select a community channel to cast your post into the democratic feed.</p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider ml-1">Available Channels</span>
-            {DEMOCRACY_CHANNELS.map(c => {
-              const Icon = c.icon;
-              const isSel = selectedChannel === c.id;
-              return (
-                <div key={c.id} onClick={() => setSelectedChannel(c.id)} className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer ${isSel ? 'bg-white dark:bg-[#111827] border-[#6C5CE7] shadow-md' : 'bg-white/50 dark:bg-[#0B0F14] border-black/5 dark:border-white/[0.08]'}`}>
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isSel ? 'bg-[#6C5CE7]/10 text-[#6C5CE7]' : 'bg-gray-100 dark:bg-gray-800 text-gray-500'}`}><Icon size={20} /></div>
-                    <div className="flex flex-col"><span className={`text-[15px] font-bold ${isSel ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>{c.name}</span><span className="text-[12px] font-medium text-gray-500">{c.members} participants</span></div>
-                  </div>
-                  <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSel ? 'border-[#6C5CE7] bg-[#6C5CE7]' : 'border-gray-300 dark:border-gray-600 bg-transparent'}`}>{isSel && <CheckCircle2 size={14} className="text-white" />}</div>
-                </div>
-              )
-            })}
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-[#05070A] p-5 pb-32">
+          <div className="bg-white dark:bg-[#111827] rounded-[28px] border border-black/5 dark:border-white/[0.08] p-5 shadow-sm flex flex-col gap-5">
+            <div className="flex gap-4">
+              <img src={MOCK_USER.avatar} className="w-12 h-12 rounded-full object-cover border border-black/5" alt="Me" />
+              <textarea 
+                placeholder="What's happening in the community?" 
+                className="flex-1 bg-transparent text-gray-900 dark:text-white outline-none resize-none text-[15px] font-medium min-h-[120px]"
+              />
+            </div>
+            
+            <div className="relative group rounded-[20px] overflow-hidden bg-gray-100 dark:bg-[#0B0F14] border border-dashed border-black/10 dark:border-white/10 aspect-video flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-gray-200/50 dark:hover:bg-white/5 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-[#6C5CE7]/10 dark:bg-[#00D1FF]/10 flex items-center justify-center text-[#6C5CE7] dark:text-[#00D1FF]">
+                <Plus size={24} />
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-[14px] font-bold text-gray-900 dark:text-white">Add Image or Video</span>
+                <span className="text-[11px] font-medium text-gray-500 mt-0.5">Videos must be less than 15 seconds</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button className="flex items-center gap-2 bg-gray-100 dark:bg-white/5 px-4 py-2.5 rounded-xl text-gray-700 dark:text-gray-300 text-[13px] font-bold"><MapPin size={16} /> Location</button>
+              <button className="flex items-center gap-2 bg-gray-100 dark:bg-white/5 px-4 py-2.5 rounded-xl text-gray-700 dark:text-gray-300 text-[13px] font-bold"><Tag size={16} /> Tag people</button>
+            </div>
           </div>
         </div>
       )}
 
       {/* Resized Glassmorphism 30% Post Options */}
       <div className="absolute bottom-8 left-0 right-0 flex justify-center z-20 pointer-events-none">
-        <div className="pointer-events-auto bg-black/10 dark:bg-white/10 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/30 dark:border-white/20 shadow-lg">
-          <button className="bg-white/40 dark:bg-white/20 text-gray-900 dark:text-white px-5 py-2 rounded-full font-bold text-[13px] shadow-sm backdrop-blur-md">POST</button>
-          <button className="text-gray-800 dark:text-gray-200 px-5 py-2 rounded-full font-bold text-[13px] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">STORY</button>
-          <button className="text-gray-800 dark:text-gray-200 px-5 py-2 rounded-full font-bold text-[13px] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">SOO</button>
+        <div className="pointer-events-auto bg-black/10 dark:bg-white/10 backdrop-blur-xl rounded-full p-1.5 flex items-center border border-white/30 dark:border-white/20 shadow-lg gap-1">
+          {activeTab === 'recent' ? (
+            <>
+              <button className="bg-white/40 dark:bg-white/20 text-gray-900 dark:text-white px-5 py-2 rounded-full font-bold text-[13px] shadow-sm backdrop-blur-md">POST</button>
+              <button className="text-gray-800 dark:text-gray-200 px-5 py-2 rounded-full font-bold text-[13px] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">STORY</button>
+              <button className="text-gray-800 dark:text-gray-200 px-5 py-2 rounded-full font-bold text-[13px] hover:bg-black/5 dark:hover:bg-white/10 transition-colors">SOOS</button>
+            </>
+          ) : (
+            <button className="bg-white/40 dark:bg-white/20 text-gray-900 dark:text-white px-8 py-2 rounded-full font-bold text-[13px] shadow-sm backdrop-blur-md tracking-wide">POST TO PULSE</button>
+          )}
         </div>
       </div>
     </div>
@@ -407,8 +416,8 @@ const HomeView = ({ onNotificationClick, onCommentClick }) => {
         )}
 
         <div className="flex px-5 gap-6">
-          <button onClick={() => setFeedTab('forYou')} className={`py-3 text-[14px] font-bold transition-all relative ${feedTab === 'forYou' ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700'}`}>Recent{feedTab === 'forYou' && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#6C5CE7] rounded-t-full"></div>}</button>
-          <button onClick={() => setFeedTab('democracy')} className={`py-3 text-[14px] font-bold transition-all relative ${feedTab === 'democracy' ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700'}`}>Democracy{feedTab === 'democracy' && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#6C5CE7] rounded-t-full"></div>}</button>
+          <button onClick={() => setFeedTab('forYou')} className={`py-3 text-[14px] font-bold transition-all relative ${feedTab === 'forYou' ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700'}`}>For you{feedTab === 'forYou' && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#6C5CE7] rounded-t-full"></div>}</button>
+          <button onClick={() => setFeedTab('pulse')} className={`py-3 text-[14px] font-bold transition-all relative ${feedTab === 'pulse' ? 'text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-700'}`}>Pulse{feedTab === 'pulse' && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#6C5CE7] rounded-t-full"></div>}</button>
         </div>
       </div>
       <div className="flex-none flex flex-col pt-5">
@@ -434,7 +443,7 @@ const HomeView = ({ onNotificationClick, onCommentClick }) => {
               <p className="text-[14px] text-gray-700 dark:text-gray-200 leading-relaxed font-medium"><span className="font-bold text-gray-900 dark:text-white mr-2">{post.user}</span>{post.caption}</p>
             </div>
           </div>
-        )) : MOCK_DEMOCRACY_POSTS.map(post => (
+        )) : MOCK_PULSE_POSTS.map(post => (
           <div key={post.id} className="mx-4 mb-6 bg-white dark:bg-[#0B0F14] border border-black/5 dark:border-white/[0.08] rounded-[28px] p-2.5 shadow-xl">
             <div className="flex justify-between items-center px-3 pt-2 pb-3">
               <div className="flex items-center gap-3">
@@ -707,7 +716,18 @@ const NotificationsView = ({ onBack }) => (
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  useEffect(() => {
+    console.log('Dark mode changed:', isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const [activeChat, setActiveChat] = useState(null);
   const [activePostComments, setActivePostComments] = useState(false);
@@ -733,7 +753,7 @@ export default function App() {
     if (showFollowers) return <UserListView title="Followers" users={MOCK_FOLLOWERS} onBack={() => setShowFollowers(false)} />;
     if (showFollowing) return <UserListView title="Following" users={MOCK_FOLLOWING} onBack={() => setShowFollowing(false)} />;
     if (showEditProfile) return <EditProfileView onBack={() => setShowEditProfile(false)} />;
-    if (showSettings) return <SettingsView onBack={() => setShowSettings(false)} isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} onSwitchAccountClick={() => setShowSwitchAccount(true)} onAccountClick={() => setShowAccountSettings(true)} onLanguageClick={() => setShowLanguageSettings(true)} />;
+    if (showSettings) return <SettingsView onBack={() => setShowSettings(false)} isDarkMode={isDarkMode} toggleDarkMode={() => setIsDarkMode(prev => !prev)} onSwitchAccountClick={() => setShowSwitchAccount(true)} onAccountClick={() => setShowAccountSettings(true)} onLanguageClick={() => setShowLanguageSettings(true)} />;
     if (showNotifications) return <NotificationsView onBack={() => setShowNotifications(false)} />;
     if (activeChat) return <ChatDetailView chat={activeChat} onBack={() => setActiveChat(null)} />;
 
