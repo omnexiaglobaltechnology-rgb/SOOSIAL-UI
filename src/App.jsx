@@ -11,8 +11,8 @@ import {
 
 const StoryRing = ({ children, hasStory, className = '' }) => (
   <div className={`relative rounded-full flex items-center justify-center transition-all ${hasStory
-      ? 'ring-[2px] ring-offset-[3px] ring-offset-white dark:ring-offset-[#0B0F14] ring-[#6C5CE7] shadow-[0_0_12px_rgba(108,92,231,0.2)] dark:shadow-[0_0_12px_rgba(108,92,231,0.3)]'
-      : 'border-[1.5px] border-black/10 dark:border-white/[0.1]'
+    ? 'ring-[2px] ring-offset-[3px] ring-offset-white dark:ring-offset-[#0B0F14] ring-[#6C5CE7] shadow-[0_0_12px_rgba(108,92,231,0.2)] dark:shadow-[0_0_12px_rgba(108,92,231,0.3)]'
+    : 'border-[1.5px] border-black/10 dark:border-white/[0.1]'
     } ${className}`}>
     {children}
   </div>
@@ -458,8 +458,8 @@ const ChatsListView = ({ onChatSelect }) => (
           key={chat.id}
           onClick={() => onChatSelect(chat)}
           className={`flex items-center gap-3 px-3 py-3 rounded-2xl cursor-pointer transition-colors active:scale-[0.98] ${chat.unread > 0
-              ? 'bg-white dark:bg-[#111827] border border-black/5 dark:border-white/[0.08] shadow-sm'
-              : 'bg-transparent hover:bg-gray-100 dark:hover:bg-[#111827]/50 border border-transparent'
+            ? 'bg-white dark:bg-[#111827] border border-black/5 dark:border-white/[0.08] shadow-sm'
+            : 'bg-transparent hover:bg-gray-100 dark:hover:bg-[#111827]/50 border border-transparent'
             }`}
         >
           <div className="relative flex-shrink-0">
